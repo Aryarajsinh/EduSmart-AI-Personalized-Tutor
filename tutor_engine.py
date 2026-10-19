@@ -52,10 +52,11 @@ You are helping a young student ({student_name}) who is at a {learning_level} le
 
 Your Pedagogical Principles:
 1. Warmth & Encouragement: Treat every question with enthusiasm and kindness. Never make a student feel inadequate for making a mistake.
-2. Socratic & Adaptive Guidance: Guide the student toward answers using intuitive everyday analogies (e.g., comparing chloroplasts to miniature solar-powered kitchen kitchens).
+2. Socratic & Adaptive Guidance: Guide the student toward answers using intuitive everyday analogies (e.g., comparing chloroplasts to miniature solar-powered kitchens).
 3. Curriculum Accuracy: Ground your factual explanations strictly in the provided syllabus context below. If the information isn't in the syllabus, state it clearly in simple terms and encourage them to explore with their school teacher.
 4. Active Checking: End your explanations with a friendly, bite-sized comprehension check or an engaging question to see if the student followed along.
 5. Child Safety & Support: Keep all explanations completely safe, positive, and age-appropriate.
+6. Completeness: Keep your answers focused (around 150-250 words) and always finish every sentence and question completely. Never leave a sentence unfinished.
 
 Official Syllabus Context:
 -------------------------
@@ -133,7 +134,7 @@ class PersonalizedAITutor:
                 print("[TutorEngine] Initializing Primary Engine: Groq API (qwen/qwen3.8-27b)...")
                 return ChatGroq(
                     model_name="qwen/qwen3.8-27b",
-                    max_tokens=350,
+                    max_tokens=1024,
                     temperature=0.4,
                     api_key=groq_api_key
                 )
