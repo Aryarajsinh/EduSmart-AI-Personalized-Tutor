@@ -31,8 +31,8 @@ This project delivers an interactive, memory-aware, and human-like AI tutor that
                                                 │
                                                 ▼
                                   ┌───────────────────────────┐
-                                  │   Hugging Face Endpoint   │
-                                  │  Mistral-7B-Instruct-v0.3 │
+                                  │   Groq High-Speed LLM     │
+                                  │   (qwen/qwen3.8-27b)      │
                                   │   (Empathetic Persona)    │
                                   └─────────────┬─────────────┘
                                                 │
@@ -49,7 +49,7 @@ This project delivers an interactive, memory-aware, and human-like AI tutor that
 
 | # | Evaluation Goal | Implementation in EduSmart AI |
 |---|----------------|-------------------------------|
-| **1** | **Human-like, adaptive responses** | Socratic pedagogical system prompt using `mistralai/Mistral-7B-Instruct-v0.3`. Breaks down complex concepts into relatable analogies and ends with active comprehension checks. |
+| **1** | **Human-like, adaptive responses** | Socratic pedagogical system prompt using **Groq High-Speed Inference** (`qwen/qwen3.8-27b`). Breaks down complex concepts into relatable analogies and ends with active comprehension checks without costly paid model fees. |
 | **2** | **Syllabus-specific vector search** | LangChain RAG pipeline using Chroma vector store and `sentence-transformers/all-MiniLM-L6-v2` dense embeddings with chunk citation. |
 | **3** | **Conversational memory** | Session-level `ChatMessageHistory` buffer injected via LangChain Expression Language (`RunnableParallel`), tracking follow-up context and student progression. |
 | **4** | **Scalability & multi-subject expansion** | Metadata-filtered Chroma collections supporting multi-subject curriculum expansion (`science`, `mathematics`, `history`) without cross-contamination. |

@@ -122,12 +122,26 @@ class PersonalizedAITutor:
 
     def _initialize_llm(self):
         """
-        Initializes Hugging Face LLM with automatic graceful fallback to Groq/OpenAI
-        if HF endpoint is queued or token quota is exceeded.
+        Initializes Groq API as the primary high-speed, cost-effective LLM engine,
+        with graceful fallback to Hugging Face or OpenAI.
         """
-        hf_token = get_config_key("HF_TOKEN") or get_config_key("HUGGINGFACEHUB_API_TOKEN")
+        # 1. Primary: Groq API (High-speed, free/cost-effective on-demand inference)
+        groq_api_key = get_config_key("GROQ_API_KEY")
+        if groq_api_key:
+            try:
+                from langchain_groq import ChatGroq
+                print("[TutorEngine] Initializing Primary Engine: Groq API (qwen/qwen3.8-27b)...")
+                return ChatGroq(
+                    model_name="qwen/qwen3.8-27b",
+                    max_tokens=350,
+                    temperature=0.4,
+                    api_key=groq_api_key
+                )
+            except Exception as e:
+                print(f"[TutorEngine] Groq initialization notice: {e}")
 
-        # 1. Attempt Hugging Face mistralai/Mistral-7B-Instruct
+        # 2. Secondary: Hugging Face Endpoint
+        hf_token = get_config_key("HF_TOKEN") or get_config_key("HUGGINGFACEHUB_API_TOKEN")
         if HAS_HF_ENDPOINT and hf_token:
             try:
                 print("[TutorEngine] Checking Hugging Face Endpoint: mistralai/Mistral-7B-Instruct-v0.3...")
@@ -139,31 +153,23 @@ class PersonalizedAITutor:
                     huggingfacehub_api_token=hf_token,
                     timeout=15
                 )
-                # Verify that user token has inference provider access
                 hf_llm.invoke("Ping")
                 print("[TutorEngine] Hugging Face Endpoint active and verified!")
                 return hf_llm
             except Exception as e:
-                print(f"[TutorEngine] HF Endpoint unavailable ({e.__class__.__name__}). Falling back to secondary engine...")
+                print(f"[TutorEngine] HF Endpoint unavailable: {e}")
 
-        # 2. Fallback to Groq for ultra-fast, high-intelligence inference
-        groq_api_key = get_config_key("GROQ_API_KEY")
-        if groq_api_key:
-            try:
-                from langchain_groq import ChatGroq
-                print("[TutorEngine] Using Groq High-Speed Inference (qwen/qwen3.8-27b)...")
-                return ChatGroq(model_name="qwen/qwen3.8-27b", max_tokens=280, temperature=0.4, api_key=groq_api_key)
-            except Exception as e:
-                print(f"[TutorEngine] Groq fallback failed: {e}")
-
-        # 3. Fallback to OpenAI if configured
+        # 3. Tertiary: OpenAI (Optional fallback if user configured key)
         openai_key = get_config_key("OPENAI_API_KEY")
         if openai_key:
-            from langchain_openai import ChatOpenAI
-            print("[TutorEngine] Using OpenAI ChatOpenAI (gpt-3.5-turbo)...")
-            return ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.4, api_key=openai_key)
+            try:
+                from langchain_openai import ChatOpenAI
+                print("[TutorEngine] Using OpenAI ChatOpenAI...")
+                return ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.4, api_key=openai_key)
+            except Exception as e:
+                print(f"[TutorEngine] OpenAI fallback failed: {e}")
 
-        raise RuntimeError("No valid LLM credentials found. Please set HF_TOKEN, GROQ_API_KEY, or OPENAI_API_KEY.")
+        raise RuntimeError("No valid LLM credentials found. Please set GROQ_API_KEY (recommended) or HF_TOKEN.")
 
     def _build_lcel_chain(self):
         """

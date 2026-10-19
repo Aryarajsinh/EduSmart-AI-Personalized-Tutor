@@ -86,8 +86,8 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("### 🛡️ Safety & Architecture")
     st.markdown("""
-    - **LLM**: Hugging Face `Mistral-7B-Instruct`
-    - **Embeddings**: `sentence-transformers/all-MiniLM-L6-v2`
+    - **Primary LLM**: Groq High-Speed API (`qwen/qwen3.8-27b`)
+    - **Embeddings**: Hugging Face `sentence-transformers/all-MiniLM-L6-v2`
     - **Vector DB**: Chroma (Syllabus RAG)
     - **Framework**: LangChain LCEL + RunnableMap
     - **Safety**: COPPA / FERPA PII Masking & Moderation
@@ -102,7 +102,7 @@ with st.sidebar:
 
 # Main Layout Header
 st.markdown('<div class="main-title">EduSmart AI • Personalized Learning Companion</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Empathetic, memory-aware tutoring powered by LangChain LCEL and Hugging Face</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title">Empathetic, memory-aware tutoring powered by LangChain LCEL, Groq API, and Hugging Face</div>', unsafe_allow_html=True)
 
 # Status Badges
 st.markdown("""
