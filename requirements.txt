@@ -1,0 +1,11 @@
+streamlit
+langchain>=0.2.0
+langchain-core>=0.2.0
+langchain-community
+langchain-huggingface
+langchain-groq
+langchain-openai
+sentence-transformers
+chromadb
+python-dotenv
+huggingface-hub
